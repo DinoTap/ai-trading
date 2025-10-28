@@ -1,1 +1,7 @@
 node_modules
+testscript/node_modules
+testscript
+MULTI_EXCHANGE_API.md
+Unified_Trading_API.postman_collection.json
+Unified_Trading_Environment.postman_environment.json
+POSTMAN_SETUP_GUIDE.md

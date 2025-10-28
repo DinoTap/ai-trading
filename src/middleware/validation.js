@@ -32,3 +32,19 @@ export const validateOrderType = (req, res, next) => {
   next();
 };
 
+export const validateExchange = (req, res, next) => {
+  const exchange = req.query.exchange || req.body.exchange || 'xt';
+  const validExchanges = ['xt', 'bybit'];
+
+  if (!validExchanges.includes(exchange.toLowerCase())) {
+    return res.status(400).json({
+      success: false,
+      error: `Invalid exchange. Must be one of: ${validExchanges.join(', ')}`
+    });
+  }
+
+  // Add exchange to request for use in controllers
+  req.exchange = exchange.toLowerCase();
+  next();
+};
+

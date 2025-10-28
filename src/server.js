@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import rateLimit from 'express-rate-limit';
 import tradingRoutes from './routes/trading.routes.js';
+import unifiedRoutes from './routes/unified.routes.js';
 import aiRoutes from './routes/ai.routes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
@@ -46,6 +47,7 @@ app.get('/health', (req, res) => {
 
 // Routes
 app.use('/api/trading', tradingRoutes);
+app.use('/api/unified', unifiedRoutes);
 app.use('/api/ai', aiRoutes);
 
 // Error handling
