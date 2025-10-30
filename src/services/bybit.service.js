@@ -128,13 +128,19 @@ class BybitService {
         category: 'spot',
         symbol: symbol,
         side: 'Buy',
-        orderType: type.toUpperCase(),
+        orderType: type && type.toString().toUpperCase() === 'MARKET' ? 'Market' : 'Limit',
         qty: quantity.toString()
       };
 
-      if (type.toUpperCase() === 'LIMIT' && price) {
+      if ((type && type.toString().toUpperCase()) === 'LIMIT' && price) {
         orderParams.price = price.toString();
         orderParams.timeInForce = 'GTC';
+      }
+
+      // For spot MARKET BUY, Bybit often expects specifying marketUnit.
+      if ((type && type.toString().toUpperCase()) === 'MARKET') {
+        // Default to baseCoin to interpret qty as base amount. Adjust in client if needed.
+        orderParams.marketUnit = 'baseCoin';
       }
 
       const response = await client.submitOrder(orderParams);
@@ -178,11 +184,11 @@ class BybitService {
         category: 'spot',
         symbol: symbol,
         side: 'Sell',
-        orderType: type.toUpperCase(),
+        orderType: type && type.toString().toUpperCase() === 'MARKET' ? 'Market' : 'Limit',
         qty: quantity.toString()
       };
 
-      if (type.toUpperCase() === 'LIMIT' && price) {
+      if ((type && type.toString().toUpperCase()) === 'LIMIT' && price) {
         orderParams.price = price.toString();
         orderParams.timeInForce = 'GTC';
       }
