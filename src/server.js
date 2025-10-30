@@ -14,6 +14,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// If running behind a proxy (e.g., Render, Vercel, Nginx), trust proxy so rate limiting can use X-Forwarded-For safely
+app.set('trust proxy', 1);
+
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes

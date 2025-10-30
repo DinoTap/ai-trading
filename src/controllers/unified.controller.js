@@ -140,6 +140,15 @@ export const xtBuyOrder = async (req, res) => {
     const apiKey = req.headers['x-xt-api-key'];
     const secretKey = req.headers['x-xt-secret-key'];
 
+    // Enforce price rules: LIMIT requires price; MARKET must not include price
+    const normalizedType = (type || 'LIMIT').toString().toUpperCase();
+    if (normalizedType === 'LIMIT' && (price === undefined || price === null)) {
+      return res.status(400).json({ success: false, error: 'Price is required for LIMIT orders' });
+    }
+    if (normalizedType === 'MARKET' && (price !== undefined && price !== null)) {
+      return res.status(400).json({ success: false, error: 'Do not send price for MARKET orders' });
+    }
+
     if (!apiKey || !secretKey) {
       return res.status(401).json({
         success: false,
@@ -182,6 +191,15 @@ export const xtSellOrder = async (req, res) => {
     // Extract API credentials from headers
     const apiKey = req.headers['x-xt-api-key'];
     const secretKey = req.headers['x-xt-secret-key'];
+
+    // Enforce price rules: LIMIT requires price; MARKET must not include price
+    const normalizedType = (type || 'LIMIT').toString().toUpperCase();
+    if (normalizedType === 'LIMIT' && (price === undefined || price === null)) {
+      return res.status(400).json({ success: false, error: 'Price is required for LIMIT orders' });
+    }
+    if (normalizedType === 'MARKET' && (price !== undefined && price !== null)) {
+      return res.status(400).json({ success: false, error: 'Do not send price for MARKET orders' });
+    }
 
     if (!apiKey || !secretKey) {
       return res.status(401).json({
@@ -226,6 +244,15 @@ export const bybitBuyOrder = async (req, res) => {
     const apiKey = req.headers['x-bybit-api-key'];
     const secretKey = req.headers['x-bybit-secret-key'];
 
+    // Enforce price rules: LIMIT requires price; MARKET must not include price
+    const normalizedType = (type || 'LIMIT').toString().toUpperCase();
+    if (normalizedType === 'LIMIT' && (price === undefined || price === null)) {
+      return res.status(400).json({ success: false, error: 'Price is required for LIMIT orders' });
+    }
+    if (normalizedType === 'MARKET' && (price !== undefined && price !== null)) {
+      return res.status(400).json({ success: false, error: 'Do not send price for MARKET orders' });
+    }
+
     if (!apiKey || !secretKey) {
       return res.status(401).json({
         success: false,
@@ -268,6 +295,15 @@ export const bybitSellOrder = async (req, res) => {
     // Extract API credentials from headers
     const apiKey = req.headers['x-bybit-api-key'];
     const secretKey = req.headers['x-bybit-secret-key'];
+
+    // Enforce price rules: LIMIT requires price; MARKET must not include price
+    const normalizedType = (type || 'LIMIT').toString().toUpperCase();
+    if (normalizedType === 'LIMIT' && (price === undefined || price === null)) {
+      return res.status(400).json({ success: false, error: 'Price is required for LIMIT orders' });
+    }
+    if (normalizedType === 'MARKET' && (price !== undefined && price !== null)) {
+      return res.status(400).json({ success: false, error: 'Do not send price for MARKET orders' });
+    }
 
     if (!apiKey || !secretKey) {
       return res.status(401).json({

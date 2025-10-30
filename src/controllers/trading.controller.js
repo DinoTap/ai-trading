@@ -218,6 +218,21 @@ export const buyOrder = async (req, res) => {
   try {
     const { symbol, quantity, price, type = 'LIMIT', exchange = 'xt' } = req.body;
 
+    // Validate price presence for LIMIT, and absence for MARKET
+    const normalizedType = (type || 'LIMIT').toString().toUpperCase();
+    if (normalizedType === 'LIMIT' && (price === undefined || price === null)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Price is required for LIMIT orders'
+      });
+    }
+    if (normalizedType === 'MARKET' && (price !== undefined && price !== null)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Do not send price for MARKET orders'
+      });
+    }
+
     // Validate exchange
     const exchangeValidation = validateExchange(exchange);
     if (!exchangeValidation.valid) {
@@ -260,6 +275,21 @@ export const buyOrder = async (req, res) => {
 export const sellOrder = async (req, res) => {
   try {
     const { symbol, quantity, price, type = 'LIMIT', exchange = 'xt' } = req.body;
+
+    // Validate price presence for LIMIT, and absence for MARKET
+    const normalizedType = (type || 'LIMIT').toString().toUpperCase();
+    if (normalizedType === 'LIMIT' && (price === undefined || price === null)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Price is required for LIMIT orders'
+      });
+    }
+    if (normalizedType === 'MARKET' && (price !== undefined && price !== null)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Do not send price for MARKET orders'
+      });
+    }
 
     // Validate exchange
     const exchangeValidation = validateExchange(exchange);
@@ -426,7 +456,14 @@ export const getTicker = async (req, res) => {
       });
     }
 
-    const service = getService(exchange);
+    let service = getService(exchange);
+    // Fallback if service implementation lacks getTicker (hot-reload or stale import issues)
+    if (!service || typeof service.getTicker !== 'function') {
+      service = exchange.toLowerCase() === 'bybit' ? bybitService : xtService;
+    }
+    if (!service || typeof service.getTicker !== 'function') {
+      return res.status(500).json({ success: false, error: 'Ticker not supported for this exchange' });
+    }
     const result = await service.getTicker(symbol, apiKey, secretKey);
     
     if (!result.success) {
@@ -469,7 +506,13 @@ export const getSymbols = async (req, res) => {
       });
     }
 
-    const service = getService(exchange);
+    let service = getService(exchange);
+    if (!service || typeof service.getSymbols !== 'function') {
+      service = exchange.toLowerCase() === 'bybit' ? bybitService : xtService;
+    }
+    if (!service || typeof service.getSymbols !== 'function') {
+      return res.status(500).json({ success: false, error: 'Symbols not supported for this exchange' });
+    }
     const result = await service.getSymbols(apiKey, secretKey);
     
     if (!result.success) {
@@ -538,7 +581,13 @@ export const getDepth = async (req, res) => {
       });
     }
 
-    const service = getService(exchange);
+    let service = getService(exchange);
+    if (!service || typeof service.getDepth !== 'function') {
+      service = exchange.toLowerCase() === 'bybit' ? bybitService : xtService;
+    }
+    if (!service || typeof service.getDepth !== 'function') {
+      return res.status(500).json({ success: false, error: 'Depth not supported for this exchange' });
+    }
     const result = await service.getDepth(symbol, parseInt(limit), apiKey, secretKey);
     
     if (!result.success) {

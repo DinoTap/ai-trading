@@ -17,6 +17,141 @@ class BybitService {
   }
 
   /**
+   * Get market ticker
+   */
+  async getTicker(symbol, apiKey, secretKey) {
+    try {
+      console.log(`Bybit: fetching ticker for ${symbol}`);
+      const client = this.createClient(apiKey, secretKey);
+      const response = await client.getTickers({ category: 'spot', symbol });
+
+      console.log('Bybit Ticker Response:', response);
+
+      if (response.retCode !== 0) {
+        return {
+          success: false,
+          error: response.retMsg || 'Failed to fetch ticker',
+          code: response.retCode,
+          details: response.retExtInfo || null
+        };
+      }
+
+      const item = response.result?.list?.[0] || null;
+      return {
+        success: true,
+        data: item || response.result
+      };
+    } catch (error) {
+      console.error('Bybit Ticker Error:', error);
+      return {
+        success: false,
+        error: error.message || 'Failed to fetch ticker'
+      };
+    }
+  }
+
+  /**
+   * Get symbols (instruments) for spot
+   */
+  async getSymbols(apiKey, secretKey) {
+    try {
+      console.log('Bybit: fetching symbols (spot instruments)');
+      const client = this.createClient(apiKey, secretKey);
+      const response = await client.getInstrumentsInfo({ category: 'spot' });
+
+      console.log('Bybit Symbols Response:', response);
+
+      if (response.retCode !== 0) {
+        return {
+          success: false,
+          error: response.retMsg || 'Failed to fetch symbols',
+          code: response.retCode,
+          details: response.retExtInfo || null
+        };
+      }
+
+      return {
+        success: true,
+        data: response.result || []
+      };
+    } catch (error) {
+      console.error('Bybit Symbols Error:', error);
+      return {
+        success: false,
+        error: error.message || 'Failed to fetch symbols'
+      };
+    }
+  }
+
+  /**
+   * Get order book depth
+   */
+  async getDepth(symbol, limit = 20, apiKey, secretKey) {
+    try {
+      console.log(`Bybit: fetching depth for ${symbol} (limit ${limit})`);
+      const client = this.createClient(apiKey, secretKey);
+      const response = await client.getOrderBook({ category: 'spot', symbol, limit: String(limit) });
+
+      console.log('Bybit Depth Response:', response);
+
+      if (response.retCode !== 0) {
+        return {
+          success: false,
+          error: response.retMsg || 'Failed to fetch depth',
+          code: response.retCode,
+          details: response.retExtInfo || null
+        };
+      }
+
+      return {
+        success: true,
+        data: response.result || response
+      };
+    } catch (error) {
+      console.error('Bybit Depth Error:', error);
+      return {
+        success: false,
+        error: error.message || 'Failed to fetch depth'
+      };
+    }
+  }
+
+  /**
+   * Get open orders (basic history proxy)
+   */
+  async getOrderHistory(symbol = null, limit = 100, apiKey, secretKey) {
+    try {
+      console.log('Bybit: fetching order history', { symbol, limit });
+      const client = this.createClient(apiKey, secretKey);
+      const params = { category: 'spot', limit };
+      if (symbol) params.symbol = symbol;
+      const response = await client.getOpenOrders(params);
+
+      console.log('Bybit Order History Response:', response);
+
+      if (response.retCode !== 0) {
+        return {
+          success: false,
+          error: response.retMsg || 'Failed to fetch order history',
+          code: response.retCode,
+          details: response.retExtInfo || null
+        };
+      }
+
+      return {
+        success: true,
+        data: response.result?.list || []
+      };
+    } catch (error) {
+      console.error('Bybit Order History Error:', error);
+      return {
+        success: false,
+        error: error.message || 'Failed to fetch order history'
+      };
+    }
+  }
+
+  /**
    * Get account balance
    */
   async getBalance(apiKey, secretKey, accountType = 'UNIFIED') {
@@ -143,6 +278,7 @@ class BybitService {
         orderParams.marketUnit = 'baseCoin';
       }
 
+      console.log('Bybit submitOrder params (BUY):', orderParams);
       const response = await client.submitOrder(orderParams);
       
       console.log('Bybit Buy Order Response:', response);
@@ -152,6 +288,7 @@ class BybitService {
           success: false,
           error: response.retMsg || 'Failed to place buy order',
           errorCode: response.retCode,
+          details: response.retExtInfo || response.result || null,
           exchange: 'bybit'
         };
       }
@@ -193,6 +330,7 @@ class BybitService {
         orderParams.timeInForce = 'GTC';
       }
 
+      console.log('Bybit submitOrder params (SELL):', orderParams);
       const response = await client.submitOrder(orderParams);
       
       console.log('Bybit Sell Order Response:', response);
@@ -202,6 +340,7 @@ class BybitService {
           success: false,
           error: response.retMsg || 'Failed to place sell order',
           errorCode: response.retCode,
+          details: response.retExtInfo || response.result || null,
           exchange: 'bybit'
         };
       }
