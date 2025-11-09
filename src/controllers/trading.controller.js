@@ -2,6 +2,7 @@ import xtService from '../services/xt.service.js';
 import bybitService from '../services/bybit.service.js';
 import binanceService from '../services/binance.service.js';
 import kucoinService from '../services/kucoin.service.js';
+import bitgetService from '../services/bitget.service.js';
 
 // Helper function to get the appropriate service
 const getService = (exchange) => {
@@ -12,6 +13,8 @@ const getService = (exchange) => {
       return binanceService;
     case 'kucoin':
       return kucoinService;
+    case 'bitget':
+      return bitgetService;
     case 'xt':
     default:
       return xtService;
@@ -20,7 +23,7 @@ const getService = (exchange) => {
 
 // Helper function to validate exchange parameter
 const validateExchange = (exchange) => {
-  const validExchanges = ['xt', 'bybit', 'binance', 'kucoin'];
+  const validExchanges = ['xt', 'bybit', 'binance', 'kucoin', 'bitget'];
   if (!exchange || !validExchanges.includes(exchange.toLowerCase())) {
     return {
       valid: false,
@@ -468,7 +471,8 @@ export const getTicker = async (req, res) => {
       const exchangeLower = exchange.toLowerCase();
       service = exchangeLower === 'bybit' ? bybitService : 
                 exchangeLower === 'binance' ? binanceService :
-                exchangeLower === 'kucoin' ? kucoinService : xtService;
+                exchangeLower === 'kucoin' ? kucoinService :
+                exchangeLower === 'bitget' ? bitgetService : xtService;
     }
     if (!service || typeof service.getTicker !== 'function') {
       return res.status(500).json({ success: false, error: 'Ticker not supported for this exchange' });
@@ -520,7 +524,8 @@ export const getSymbols = async (req, res) => {
       const exchangeLower = exchange.toLowerCase();
       service = exchangeLower === 'bybit' ? bybitService : 
                 exchangeLower === 'binance' ? binanceService :
-                exchangeLower === 'kucoin' ? kucoinService : xtService;
+                exchangeLower === 'kucoin' ? kucoinService :
+                exchangeLower === 'bitget' ? bitgetService : xtService;
     }
     if (!service || typeof service.getSymbols !== 'function') {
       return res.status(500).json({ success: false, error: 'Symbols not supported for this exchange' });
@@ -598,7 +603,8 @@ export const getDepth = async (req, res) => {
       const exchangeLower = exchange.toLowerCase();
       service = exchangeLower === 'bybit' ? bybitService : 
                 exchangeLower === 'binance' ? binanceService :
-                exchangeLower === 'kucoin' ? kucoinService : xtService;
+                exchangeLower === 'kucoin' ? kucoinService :
+                exchangeLower === 'bitget' ? bitgetService : xtService;
     }
     if (!service || typeof service.getDepth !== 'function') {
       return res.status(500).json({ success: false, error: 'Depth not supported for this exchange' });

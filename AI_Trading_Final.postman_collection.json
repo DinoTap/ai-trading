@@ -1,0 +1,815 @@
+{
+  "info": {
+    "name": "AI Trading API - Final (5 Exchanges)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Complete collection for XT, Bybit, Binance, KuCoin, and Bitget exchanges"
+  },
+  "item": [
+    {
+      "name": "🏦 Combined Balance",
+      "item": [
+        {
+          "name": "Get All Exchanges Balance",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-xt-api-key", "value": "{{xt_api_key}}", "type": "text" },
+              { "key": "x-xt-secret-key", "value": "{{xt_secret_key}}", "type": "text" },
+              { "key": "x-bybit-api-key", "value": "{{bybit_api_key}}", "type": "text" },
+              { "key": "x-bybit-secret-key", "value": "{{bybit_secret_key}}", "type": "text" },
+              { "key": "x-binance-api-key", "value": "{{binance_api_key}}", "type": "text" },
+              { "key": "x-binance-secret-key", "value": "{{binance_secret_key}}", "type": "text" },
+              { "key": "x-kucoin-api-key", "value": "{{kucoin_api_key}}", "type": "text" },
+              { "key": "x-kucoin-secret-key", "value": "{{kucoin_secret_key}}", "type": "text" },
+              { "key": "x-kucoin-passphrase", "value": "{{kucoin_passphrase}}", "type": "text" },
+              { "key": "x-bitget-api-key", "value": "{{bitget_api_key}}", "type": "text" },
+              { "key": "x-bitget-secret-key", "value": "{{bitget_secret_key}}", "type": "text" },
+              { "key": "x-bitget-passphrase", "value": "{{bitget_passphrase}}", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/unified/balance",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "balance"]
+            },
+            "description": "Get combined portfolio from all 5 exchanges"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🟡 Binance",
+      "item": [
+        {
+          "name": "Balance",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-binance-api-key", "value": "{{binance_api_key}}" },
+              { "key": "x-binance-secret-key", "value": "{{binance_secret_key}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/unified/balance/binance",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "balance", "binance"]
+            }
+          }
+        },
+        {
+          "name": "Buy - Market",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-binance-api-key", "value": "{{binance_api_key}}" },
+              { "key": "x-binance-secret-key", "value": "{{binance_secret_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTCUSDT\",\n  \"type\": \"MARKET\",\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/binance/buy",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "binance", "buy"]
+            }
+          }
+        },
+        {
+          "name": "Buy - Limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-binance-api-key", "value": "{{binance_api_key}}" },
+              { "key": "x-binance-secret-key", "value": "{{binance_secret_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTCUSDT\",\n  \"type\": \"LIMIT\",\n  \"price\": 60000,\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/binance/buy",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "binance", "buy"]
+            }
+          }
+        },
+        {
+          "name": "Sell - Market",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-binance-api-key", "value": "{{binance_api_key}}" },
+              { "key": "x-binance-secret-key", "value": "{{binance_secret_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTCUSDT\",\n  \"type\": \"MARKET\",\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/binance/sell",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "binance", "sell"]
+            }
+          }
+        },
+        {
+          "name": "Sell - Limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-binance-api-key", "value": "{{binance_api_key}}" },
+              { "key": "x-binance-secret-key", "value": "{{binance_secret_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTCUSDT\",\n  \"type\": \"LIMIT\",\n  \"price\": 60000,\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/binance/sell",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "binance", "sell"]
+            }
+          }
+        },
+        {
+          "name": "Get Symbols",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{binance_api_key}}" },
+              { "key": "x-secret-key", "value": "{{binance_secret_key}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/trading/symbols?exchange=binance",
+              "host": ["{{base_url}}"],
+              "path": ["api", "trading", "symbols"],
+              "query": [{ "key": "exchange", "value": "binance" }]
+            }
+          }
+        },
+        {
+          "name": "Get Ticker",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{binance_api_key}}" },
+              { "key": "x-secret-key", "value": "{{binance_secret_key}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/trading/ticker/BTCUSDT?exchange=binance",
+              "host": ["{{base_url}}"],
+              "path": ["api", "trading", "ticker", "BTCUSDT"],
+              "query": [{ "key": "exchange", "value": "binance" }]
+            }
+          }
+        },
+        {
+          "name": "Get Order Book",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{binance_api_key}}" },
+              { "key": "x-secret-key", "value": "{{binance_secret_key}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/trading/depth/BTCUSDT?exchange=binance&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "trading", "depth", "BTCUSDT"],
+              "query": [
+                { "key": "exchange", "value": "binance" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        }
+      ],
+      "description": "Binance - Symbol: BTCUSDT"
+    },
+    {
+      "name": "🔵 Bybit",
+      "item": [
+        {
+          "name": "Balance",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-bybit-api-key", "value": "{{bybit_api_key}}" },
+              { "key": "x-bybit-secret-key", "value": "{{bybit_secret_key}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/unified/balance/bybit",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "balance", "bybit"]
+            }
+          }
+        },
+        {
+          "name": "Buy - Market",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-bybit-api-key", "value": "{{bybit_api_key}}" },
+              { "key": "x-bybit-secret-key", "value": "{{bybit_secret_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTCUSDT\",\n  \"type\": \"MARKET\",\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/bybit/buy",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "bybit", "buy"]
+            }
+          }
+        },
+        {
+          "name": "Buy - Limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-bybit-api-key", "value": "{{bybit_api_key}}" },
+              { "key": "x-bybit-secret-key", "value": "{{bybit_secret_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTCUSDT\",\n  \"type\": \"LIMIT\",\n  \"price\": 60000,\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/bybit/buy",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "bybit", "buy"]
+            }
+          }
+        },
+        {
+          "name": "Sell - Market",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-bybit-api-key", "value": "{{bybit_api_key}}" },
+              { "key": "x-bybit-secret-key", "value": "{{bybit_secret_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTCUSDT\",\n  \"type\": \"MARKET\",\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/bybit/sell",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "bybit", "sell"]
+            }
+          }
+        },
+        {
+          "name": "Sell - Limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-bybit-api-key", "value": "{{bybit_api_key}}" },
+              { "key": "x-bybit-secret-key", "value": "{{bybit_secret_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTCUSDT\",\n  \"type\": \"LIMIT\",\n  \"price\": 60000,\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/bybit/sell",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "bybit", "sell"]
+            }
+          }
+        },
+        {
+          "name": "Get Symbols",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{bybit_api_key}}" },
+              { "key": "x-secret-key", "value": "{{bybit_secret_key}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/trading/symbols?exchange=bybit",
+              "host": ["{{base_url}}"],
+              "path": ["api", "trading", "symbols"],
+              "query": [{ "key": "exchange", "value": "bybit" }]
+            }
+          }
+        },
+        {
+          "name": "Get Ticker",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{bybit_api_key}}" },
+              { "key": "x-secret-key", "value": "{{bybit_secret_key}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/trading/ticker/BTCUSDT?exchange=bybit",
+              "host": ["{{base_url}}"],
+              "path": ["api", "trading", "ticker", "BTCUSDT"],
+              "query": [{ "key": "exchange", "value": "bybit" }]
+            }
+          }
+        }
+      ],
+      "description": "Bybit - Symbol: BTCUSDT"
+    },
+    {
+      "name": "🟠 KuCoin",
+      "item": [
+        {
+          "name": "Balance",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-kucoin-api-key", "value": "{{kucoin_api_key}}" },
+              { "key": "x-kucoin-secret-key", "value": "{{kucoin_secret_key}}" },
+              { "key": "x-kucoin-passphrase", "value": "{{kucoin_passphrase}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/unified/balance/kucoin",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "balance", "kucoin"]
+            }
+          }
+        },
+        {
+          "name": "Buy - Market",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-kucoin-api-key", "value": "{{kucoin_api_key}}" },
+              { "key": "x-kucoin-secret-key", "value": "{{kucoin_secret_key}}" },
+              { "key": "x-kucoin-passphrase", "value": "{{kucoin_passphrase}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTC-USDT\",\n  \"type\": \"MARKET\",\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/kucoin/buy",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "kucoin", "buy"]
+            }
+          }
+        },
+        {
+          "name": "Buy - Limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-kucoin-api-key", "value": "{{kucoin_api_key}}" },
+              { "key": "x-kucoin-secret-key", "value": "{{kucoin_secret_key}}" },
+              { "key": "x-kucoin-passphrase", "value": "{{kucoin_passphrase}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTC-USDT\",\n  \"type\": \"LIMIT\",\n  \"price\": 60000,\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/kucoin/buy",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "kucoin", "buy"]
+            }
+          }
+        },
+        {
+          "name": "Sell - Market",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-kucoin-api-key", "value": "{{kucoin_api_key}}" },
+              { "key": "x-kucoin-secret-key", "value": "{{kucoin_secret_key}}" },
+              { "key": "x-kucoin-passphrase", "value": "{{kucoin_passphrase}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTC-USDT\",\n  \"type\": \"MARKET\",\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/kucoin/sell",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "kucoin", "sell"]
+            }
+          }
+        },
+        {
+          "name": "Sell - Limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-kucoin-api-key", "value": "{{kucoin_api_key}}" },
+              { "key": "x-kucoin-secret-key", "value": "{{kucoin_secret_key}}" },
+              { "key": "x-kucoin-passphrase", "value": "{{kucoin_passphrase}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTC-USDT\",\n  \"type\": \"LIMIT\",\n  \"price\": 60000,\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/kucoin/sell",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "kucoin", "sell"]
+            }
+          }
+        },
+        {
+          "name": "Get Symbols",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{kucoin_api_key}}" },
+              { "key": "x-secret-key", "value": "{{kucoin_secret_key}}" },
+              { "key": "x-kucoin-passphrase", "value": "{{kucoin_passphrase}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/trading/symbols?exchange=kucoin",
+              "host": ["{{base_url}}"],
+              "path": ["api", "trading", "symbols"],
+              "query": [{ "key": "exchange", "value": "kucoin" }]
+            }
+          }
+        },
+        {
+          "name": "Get Ticker",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{kucoin_api_key}}" },
+              { "key": "x-secret-key", "value": "{{kucoin_secret_key}}" },
+              { "key": "x-kucoin-passphrase", "value": "{{kucoin_passphrase}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/trading/ticker/BTC-USDT?exchange=kucoin",
+              "host": ["{{base_url}}"],
+              "path": ["api", "trading", "ticker", "BTC-USDT"],
+              "query": [{ "key": "exchange", "value": "kucoin" }]
+            }
+          }
+        }
+      ],
+      "description": "KuCoin - Symbol: BTC-USDT (dash) - Requires passphrase"
+    },
+    {
+      "name": "🔴 Bitget",
+      "item": [
+        {
+          "name": "Balance",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-bitget-api-key", "value": "{{bitget_api_key}}" },
+              { "key": "x-bitget-secret-key", "value": "{{bitget_secret_key}}" },
+              { "key": "x-bitget-passphrase", "value": "{{bitget_passphrase}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/unified/balance/bitget",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "balance", "bitget"]
+            }
+          }
+        },
+        {
+          "name": "Buy - Market",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-bitget-api-key", "value": "{{bitget_api_key}}" },
+              { "key": "x-bitget-secret-key", "value": "{{bitget_secret_key}}" },
+              { "key": "x-bitget-passphrase", "value": "{{bitget_passphrase}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTCUSDT\",\n  \"type\": \"MARKET\",\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/bitget/buy",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "bitget", "buy"]
+            }
+          }
+        },
+        {
+          "name": "Buy - Limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-bitget-api-key", "value": "{{bitget_api_key}}" },
+              { "key": "x-bitget-secret-key", "value": "{{bitget_secret_key}}" },
+              { "key": "x-bitget-passphrase", "value": "{{bitget_passphrase}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTCUSDT\",\n  \"type\": \"LIMIT\",\n  \"price\": 60000,\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/bitget/buy",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "bitget", "buy"]
+            }
+          }
+        },
+        {
+          "name": "Sell - Market",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-bitget-api-key", "value": "{{bitget_api_key}}" },
+              { "key": "x-bitget-secret-key", "value": "{{bitget_secret_key}}" },
+              { "key": "x-bitget-passphrase", "value": "{{bitget_passphrase}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTCUSDT\",\n  \"type\": \"MARKET\",\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/bitget/sell",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "bitget", "sell"]
+            }
+          }
+        },
+        {
+          "name": "Sell - Limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-bitget-api-key", "value": "{{bitget_api_key}}" },
+              { "key": "x-bitget-secret-key", "value": "{{bitget_secret_key}}" },
+              { "key": "x-bitget-passphrase", "value": "{{bitget_passphrase}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTCUSDT\",\n  \"type\": \"LIMIT\",\n  \"price\": 60000,\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/bitget/sell",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "bitget", "sell"]
+            }
+          }
+        },
+        {
+          "name": "Get Symbols",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{bitget_api_key}}" },
+              { "key": "x-secret-key", "value": "{{bitget_secret_key}}" },
+              { "key": "x-bitget-passphrase", "value": "{{bitget_passphrase}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/trading/symbols?exchange=bitget",
+              "host": ["{{base_url}}"],
+              "path": ["api", "trading", "symbols"],
+              "query": [{ "key": "exchange", "value": "bitget" }]
+            }
+          }
+        },
+        {
+          "name": "Get Ticker",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{bitget_api_key}}" },
+              { "key": "x-secret-key", "value": "{{bitget_secret_key}}" },
+              { "key": "x-bitget-passphrase", "value": "{{bitget_passphrase}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/trading/ticker/BTCUSDT?exchange=bitget",
+              "host": ["{{base_url}}"],
+              "path": ["api", "trading", "ticker", "BTCUSDT"],
+              "query": [{ "key": "exchange", "value": "bitget" }]
+            }
+          }
+        }
+      ],
+      "description": "Bitget - Symbol: BTCUSDT - Requires passphrase"
+    },
+    {
+      "name": "🟢 XT",
+      "item": [
+        {
+          "name": "Balance",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-xt-api-key", "value": "{{xt_api_key}}" },
+              { "key": "x-xt-secret-key", "value": "{{xt_secret_key}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/unified/balance/xt",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "balance", "xt"]
+            }
+          }
+        },
+        {
+          "name": "Buy - Market",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-xt-api-key", "value": "{{xt_api_key}}" },
+              { "key": "x-xt-secret-key", "value": "{{xt_secret_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTC_USDT\",\n  \"type\": \"MARKET\",\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/xt/buy",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "xt", "buy"]
+            }
+          }
+        },
+        {
+          "name": "Buy - Limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-xt-api-key", "value": "{{xt_api_key}}" },
+              { "key": "x-xt-secret-key", "value": "{{xt_secret_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTC_USDT\",\n  \"type\": \"LIMIT\",\n  \"price\": 60000,\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/xt/buy",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "xt", "buy"]
+            }
+          }
+        },
+        {
+          "name": "Sell - Market",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-xt-api-key", "value": "{{xt_api_key}}" },
+              { "key": "x-xt-secret-key", "value": "{{xt_secret_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTC_USDT\",\n  \"type\": \"MARKET\",\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/xt/sell",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "xt", "sell"]
+            }
+          }
+        },
+        {
+          "name": "Sell - Limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-xt-api-key", "value": "{{xt_api_key}}" },
+              { "key": "x-xt-secret-key", "value": "{{xt_secret_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"BTC_USDT\",\n  \"type\": \"LIMIT\",\n  \"price\": 60000,\n  \"quantity\": 0.001\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/unified/xt/sell",
+              "host": ["{{base_url}}"],
+              "path": ["api", "unified", "xt", "sell"]
+            }
+          }
+        },
+        {
+          "name": "Get Symbols",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{xt_api_key}}" },
+              { "key": "x-secret-key", "value": "{{xt_secret_key}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/trading/symbols?exchange=xt",
+              "host": ["{{base_url}}"],
+              "path": ["api", "trading", "symbols"],
+              "query": [{ "key": "exchange", "value": "xt" }]
+            }
+          }
+        },
+        {
+          "name": "Get Ticker",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{xt_api_key}}" },
+              { "key": "x-secret-key", "value": "{{xt_secret_key}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/trading/ticker/BTC_USDT?exchange=xt",
+              "host": ["{{base_url}}"],
+              "path": ["api", "trading", "ticker", "BTC_USDT"],
+              "query": [{ "key": "exchange", "value": "xt" }]
+            }
+          }
+        }
+      ],
+      "description": "XT - Symbol: BTC_USDT (underscore)"
+    },
+    {
+      "name": "🤖 AI",
+      "item": [
+        {
+          "name": "Chat with AI",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"What's the best strategy for BTC?\",\n  \"provider\": \"gemini\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/ai/chat",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ai", "chat"]
+            }
+          }
+        },
+        {
+          "name": "Get AI Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/ai/status",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ai", "status"]
+            }
+          }
+        },
+        {
+          "name": "Get Real-Time Price",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/ai/price/BTC",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ai", "price", "BTC"]
+            }
+          }
+        },
+        {
+          "name": "Get Market Analysis",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/ai/analysis/ETH",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ai", "analysis", "ETH"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "❤️ Health",
+      "item": [
+        {
+          "name": "Server Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+

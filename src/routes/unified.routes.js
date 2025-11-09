@@ -5,6 +5,7 @@ import {
   getBybitBalance,
   getBinanceBalance,
   getKucoinBalance,
+  getBitgetBalance,
   xtBuyOrder,
   xtSellOrder,
   bybitBuyOrder,
@@ -12,7 +13,9 @@ import {
   binanceBuyOrder,
   binanceSellOrder,
   kucoinBuyOrder,
-  kucoinSellOrder
+  kucoinSellOrder,
+  bitgetBuyOrder,
+  bitgetSellOrder
 } from '../controllers/unified.controller.js';
 
 const router = express.Router();
@@ -23,6 +26,7 @@ router.get('/balance/xt', getXtBalance);             // Get XT balance only
 router.get('/balance/bybit', getBybitBalance);       // Get Bybit balance only
 router.get('/balance/binance', getBinanceBalance);   // Get Binance balance only
 router.get('/balance/kucoin', getKucoinBalance);     // Get KuCoin balance only
+router.get('/balance/bitget', getBitgetBalance);     // Get Bitget balance only
 
 // XT Trading Routes
 router.post('/xt/buy', xtBuyOrder);                  // XT Buy Order
@@ -39,5 +43,9 @@ router.post('/binance/sell', binanceSellOrder);      // Binance Sell Order
 // KuCoin Trading Routes
 router.post('/kucoin/buy', kucoinBuyOrder);          // KuCoin Buy Order
 router.post('/kucoin/sell', kucoinSellOrder);        // KuCoin Sell Order
+
+// Bitget Trading Routes
+router.post('/bitget/buy', bitgetBuyOrder);          // Bitget Buy Order
+router.post('/bitget/sell', bitgetSellOrder);        // Bitget Sell Order
 
 export default router;

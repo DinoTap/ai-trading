@@ -2,9 +2,10 @@ import xtService from '../services/xt.service.js';
 import bybitService from '../services/bybit.service.js';
 import binanceService from '../services/binance.service.js';
 import kucoinService from '../services/kucoin.service.js';
+import bitgetService from '../services/bitget.service.js';
 
 /**
- * Unified Balance API - Get balances from all exchanges (XT, Bybit, Binance, KuCoin)
+ * Unified Balance API - Get balances from all exchanges (XT, Bybit, Binance, KuCoin, Bitget)
  */
 export const getUnifiedBalance = async (req, res) => {
   try {
@@ -18,6 +19,9 @@ export const getUnifiedBalance = async (req, res) => {
     const kucoinApiKey = req.headers['x-kucoin-api-key'];
     const kucoinSecretKey = req.headers['x-kucoin-secret-key'];
     const kucoinPassphrase = req.headers['x-kucoin-passphrase'];
+    const bitgetApiKey = req.headers['x-bitget-api-key'];
+    const bitgetSecretKey = req.headers['x-bitget-secret-key'];
+    const bitgetPassphrase = req.headers['x-bitget-passphrase'];
 
     const results = [];
     const errors = [];
@@ -126,6 +130,32 @@ export const getUnifiedBalance = async (req, res) => {
       }
     }
 
+    // Fetch Bitget balance if credentials provided
+    if (bitgetApiKey && bitgetSecretKey && bitgetPassphrase) {
+      try {
+        console.log('Fetching Bitget balance...');
+        const bitgetResult = await bitgetService.getPortfolio(bitgetApiKey, bitgetSecretKey, bitgetPassphrase);
+        if (bitgetResult.success) {
+          results.push({
+            exchange: 'bitget',
+            data: bitgetResult.data,
+            timestamp: new Date().toISOString()
+          });
+        } else {
+          errors.push({ 
+            exchange: 'bitget', 
+            error: bitgetResult.error,
+            code: bitgetResult.code 
+          });
+        }
+      } catch (error) {
+        errors.push({ 
+          exchange: 'bitget', 
+          error: error.message 
+        });
+      }
+    }
+
     if (results.length === 0) {
       return res.status(400).json({
         success: false,
@@ -140,7 +170,10 @@ export const getUnifiedBalance = async (req, res) => {
           'x-binance-secret-key': 'Binance Secret Key',
           'x-kucoin-api-key': 'KuCoin API Key',
           'x-kucoin-secret-key': 'KuCoin Secret Key',
-          'x-kucoin-passphrase': 'KuCoin Passphrase'
+          'x-kucoin-passphrase': 'KuCoin Passphrase',
+          'x-bitget-api-key': 'Bitget API Key',
+          'x-bitget-secret-key': 'Bitget Secret Key',
+          'x-bitget-passphrase': 'Bitget Passphrase'
         }
       });
     }
@@ -740,6 +773,146 @@ export const kucoinSellOrder = async (req, res) => {
     res.status(500).json({
       success: false,
       error: error.message || 'Failed to place KuCoin sell order'
+    });
+  }
+};
+
+/**
+ * Get Bitget Balance Only
+ */
+export const getBitgetBalance = async (req, res) => {
+  try {
+    const apiKey = req.headers['x-bitget-api-key'];
+    const secretKey = req.headers['x-bitget-secret-key'];
+    const passphrase = req.headers['x-bitget-passphrase'];
+
+    if (!apiKey || !secretKey || !passphrase) {
+      return res.status(401).json({
+        success: false,
+        error: 'Bitget API credentials are required in headers: x-bitget-api-key, x-bitget-secret-key, x-bitget-passphrase'
+      });
+    }
+
+    const result = await bitgetService.getPortfolio(apiKey, secretKey, passphrase);
+    
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    res.status(200).json({
+      ...result,
+      exchange: 'bitget'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to fetch Bitget balance'
+    });
+  }
+};
+
+/**
+ * Bitget Buy Order API
+ */
+export const bitgetBuyOrder = async (req, res) => {
+  try {
+    const { symbol, quantity, price, type = 'LIMIT' } = req.body;
+    
+    // Extract API credentials from headers
+    const apiKey = req.headers['x-bitget-api-key'];
+    const secretKey = req.headers['x-bitget-secret-key'];
+    const passphrase = req.headers['x-bitget-passphrase'];
+
+    // Enforce price rules: LIMIT requires price; MARKET must not include price
+    const normalizedType = (type || 'LIMIT').toString().toUpperCase();
+    if (normalizedType === 'LIMIT' && (price === undefined || price === null)) {
+      return res.status(400).json({ success: false, error: 'Price is required for LIMIT orders' });
+    }
+    if (normalizedType === 'MARKET' && (price !== undefined && price !== null)) {
+      return res.status(400).json({ success: false, error: 'Do not send price for MARKET orders' });
+    }
+
+    if (!apiKey || !secretKey || !passphrase) {
+      return res.status(401).json({
+        success: false,
+        error: 'Bitget API credentials are required in headers: x-bitget-api-key, x-bitget-secret-key, x-bitget-passphrase'
+      });
+    }
+
+    if (!symbol || !quantity) {
+      return res.status(400).json({
+        success: false,
+        error: 'Symbol and quantity are required'
+      });
+    }
+
+    const result = await bitgetService.placeBuyOrder(symbol, quantity, price, type, apiKey, secretKey, passphrase);
+    
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    res.status(201).json({
+      ...result,
+      exchange: 'bitget'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to place Bitget buy order'
+    });
+  }
+};
+
+/**
+ * Bitget Sell Order API
+ */
+export const bitgetSellOrder = async (req, res) => {
+  try {
+    const { symbol, quantity, price, type = 'LIMIT' } = req.body;
+    
+    // Extract API credentials from headers
+    const apiKey = req.headers['x-bitget-api-key'];
+    const secretKey = req.headers['x-bitget-secret-key'];
+    const passphrase = req.headers['x-bitget-passphrase'];
+
+    // Enforce price rules: LIMIT requires price; MARKET must not include price
+    const normalizedType = (type || 'LIMIT').toString().toUpperCase();
+    if (normalizedType === 'LIMIT' && (price === undefined || price === null)) {
+      return res.status(400).json({ success: false, error: 'Price is required for LIMIT orders' });
+    }
+    if (normalizedType === 'MARKET' && (price !== undefined && price !== null)) {
+      return res.status(400).json({ success: false, error: 'Do not send price for MARKET orders' });
+    }
+
+    if (!apiKey || !secretKey || !passphrase) {
+      return res.status(401).json({
+        success: false,
+        error: 'Bitget API credentials are required in headers: x-bitget-api-key, x-bitget-secret-key, x-bitget-passphrase'
+      });
+    }
+
+    if (!symbol || !quantity) {
+      return res.status(400).json({
+        success: false,
+        error: 'Symbol and quantity are required'
+      });
+    }
+
+    const result = await bitgetService.placeSellOrder(symbol, quantity, price, type, apiKey, secretKey, passphrase);
+    
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    res.status(201).json({
+      ...result,
+      exchange: 'bitget'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to place Bitget sell order'
     });
   }
 };

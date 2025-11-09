@@ -34,7 +34,7 @@ export const validateOrderType = (req, res, next) => {
 
 export const validateExchange = (req, res, next) => {
   const exchange = req.query.exchange || req.body.exchange || 'xt';
-  const validExchanges = ['xt', 'bybit', 'binance', 'kucoin'];
+  const validExchanges = ['xt', 'bybit', 'binance', 'kucoin', 'bitget'];
 
   if (!validExchanges.includes(exchange.toLowerCase())) {
     return res.status(400).json({
