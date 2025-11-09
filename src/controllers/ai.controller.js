@@ -101,7 +101,7 @@ export const sendMessage = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Error in AI chat:', error);
+    console.log('Error in AI chat:', error);
     
     res.status(500).json({
       success: false,
@@ -138,7 +138,7 @@ export const getStatus = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Error checking AI status:', error);
+    console.log('Error checking AI status:', error);
     
     res.status(500).json({
       success: false,
@@ -178,7 +178,7 @@ export const getRealTimePrice = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Error fetching real-time price:', error);
+    console.log('Error fetching real-time price:', error);
     
     res.status(500).json({
       success: false,
@@ -219,7 +219,7 @@ export const getMarketAnalysis = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Error fetching market analysis:', error);
+    console.log('Error fetching market analysis:', error);
     
     res.status(500).json({
       success: false,

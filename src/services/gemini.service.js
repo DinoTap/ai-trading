@@ -82,7 +82,7 @@ Assistant (respond as a crypto/blockchain expert only):`;
       return aiResponse;
       
     } catch (error) {
-      console.error('Error sending message to Gemini:', error.response?.data || error.message);
+      console.log('Error sending message to Gemini:', error.response?.data || error.message);
       
       // Handle specific error cases
       if (error.response?.status === 400) {

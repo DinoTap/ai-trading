@@ -31,7 +31,7 @@ class ChainGPTService {
       const aiResponse = response?.data?.bot;
       
       if (!aiResponse) {
-        console.error('No bot message in response:', response);
+        console.log('No bot message in response:', response);
         throw new Error('No response from ChainGPT API');
       }
 
@@ -39,7 +39,7 @@ class ChainGPTService {
       return aiResponse;
       
     } catch (error) {
-      console.error('Error sending message to ChainGPT:', error.message);
+      console.log('Error sending message to ChainGPT:', error.message);
       
       // Handle specific error cases
       if (error.message?.includes('401') || error.message?.includes('unauthorized')) {
@@ -74,7 +74,7 @@ class ChainGPTService {
       };
       
     } catch (error) {
-      console.error('Error fetching real-time price:', error.message);
+      console.log('Error fetching real-time price:', error.message);
       throw new Error(`Failed to fetch real-time price for ${symbol}: ${error.message}`);
     }
   }
@@ -93,7 +93,7 @@ class ChainGPTService {
       return await this.sendMessage(message);
       
     } catch (error) {
-      console.error('Error getting market analysis:', error.message);
+      console.log('Error getting market analysis:', error.message);
       throw error;
     }
   }

@@ -42,7 +42,7 @@ class BybitService {
         data: item || response.result
       };
     } catch (error) {
-      console.error('Bybit Ticker Error:', error);
+      console.log('Bybit Ticker Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to fetch ticker'
@@ -75,7 +75,7 @@ class BybitService {
         data: response.result || []
       };
     } catch (error) {
-      console.error('Bybit Symbols Error:', error);
+      console.log('Bybit Symbols Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to fetch symbols'
@@ -108,7 +108,7 @@ class BybitService {
         data: response.result || response
       };
     } catch (error) {
-      console.error('Bybit Depth Error:', error);
+      console.log('Bybit Depth Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to fetch depth'
@@ -143,7 +143,7 @@ class BybitService {
         data: response.result?.list || []
       };
     } catch (error) {
-      console.error('Bybit Order History Error:', error);
+      console.log('Bybit Order History Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to fetch order history'
@@ -181,7 +181,7 @@ class BybitService {
         exchange: 'bybit'
       };
     } catch (error) {
-      console.error('Bybit Balance Error:', error);
+      console.log('Bybit Balance Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to fetch balance',
@@ -241,7 +241,7 @@ class BybitService {
         }
       };
     } catch (error) {
-      console.error('Bybit Portfolio Error:', error);
+      console.log('Bybit Portfolio Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to fetch portfolio',
@@ -299,7 +299,7 @@ class BybitService {
         exchange: 'bybit'
       };
     } catch (error) {
-      console.error('Bybit Buy Order Error:', error);
+      console.log('Bybit Buy Order Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to place buy order',
@@ -351,7 +351,7 @@ class BybitService {
         exchange: 'bybit'
       };
     } catch (error) {
-      console.error('Bybit Sell Order Error:', error);
+      console.log('Bybit Sell Order Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to place sell order',
@@ -391,7 +391,7 @@ class BybitService {
         exchange: 'bybit'
       };
     } catch (error) {
-      console.error('Bybit Cancel Order Error:', error);
+      console.log('Bybit Cancel Order Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to cancel order',
@@ -420,7 +420,7 @@ class BybitService {
         exchange: 'bybit'
       };
     } catch (error) {
-      console.error('Bybit Connection Test Error:', error);
+      console.log('Bybit Connection Test Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to connect to Bybit',

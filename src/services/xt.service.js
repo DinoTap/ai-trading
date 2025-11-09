@@ -117,7 +117,7 @@ class XTService {
         metadata: metadata
       };
     } catch (error) {
-      console.error('Balance Error:', error);
+      console.log('Balance Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to fetch balance'
@@ -141,7 +141,7 @@ class XTService {
 
       // Check if balances is actually an array
       if (!Array.isArray(balances)) {
-        console.error('Balances is not an array:', balances);
+        console.log('Balances is not an array:', balances);
         return {
           success: false,
           error: 'Invalid balance data structure',
@@ -180,7 +180,7 @@ class XTService {
         }
       };
     } catch (error) {
-      console.error('Portfolio Error:', error);
+      console.log('Portfolio Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to fetch portfolio'
@@ -206,7 +206,7 @@ class XTService {
         s.symbol.toLowerCase() === symbol.toLowerCase()
       );
     } catch (error) {
-      console.error('Get Symbol Info Error:', error);
+      console.log('Get Symbol Info Error:', error);
       return null;
     }
   }
@@ -315,7 +315,7 @@ class XTService {
         currency: quoteCurrency
       };
     } catch (error) {
-      console.error('Balance Check Error:', error);
+      console.log('Balance Check Error:', error);
       return { sufficient: false, available: 0, required: requiredAmount };
     }
   }
@@ -333,7 +333,7 @@ class XTService {
       // Validate order
       const validation = this.validateOrder(symbolInfo, quantity, price, type);
       if (!validation.valid) {
-        console.error('Order validation failed:', validation.errors);
+        console.log('Order validation failed:', validation.errors);
         return {
           success: false,
           error: `Order validation failed: ${validation.errors.join(', ')}`,
@@ -419,7 +419,7 @@ class XTService {
         data: response.result || response
       };
     } catch (error) {
-      console.error('Buy Order Error:', error);
+      console.log('Buy Order Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to place buy order'
@@ -440,7 +440,7 @@ class XTService {
       // Validate order
       const validation = this.validateOrder(symbolInfo, quantity, price, type);
       if (!validation.valid) {
-        console.error('Order validation failed:', validation.errors);
+        console.log('Order validation failed:', validation.errors);
         return {
           success: false,
           error: `Order validation failed: ${validation.errors.join(', ')}`,
@@ -505,7 +505,7 @@ class XTService {
         data: response.result || response
       };
     } catch (error) {
-      console.error('Sell Order Error:', error);
+      console.log('Sell Order Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to place sell order'
@@ -537,7 +537,7 @@ class XTService {
         data: response.result || response
       };
     } catch (error) {
-      console.error('Cancel Order Error:', error);
+      console.log('Cancel Order Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to cancel order'
@@ -574,7 +574,7 @@ class XTService {
         data: response.result || []
       };
     } catch (error) {
-      console.error('Order History Error:', error);
+      console.log('Order History Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to fetch order history'
@@ -606,7 +606,7 @@ class XTService {
         data: response.result || response
       };
     } catch (error) {
-      console.error('Ticker Error:', error);
+      console.log('Ticker Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to fetch ticker'
@@ -638,7 +638,7 @@ class XTService {
         data: response.result || []
       };
     } catch (error) {
-      console.error('Symbols Error:', error);
+      console.log('Symbols Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to fetch symbols'
@@ -673,7 +673,7 @@ class XTService {
         data: response.result || response
       };
     } catch (error) {
-      console.error('Depth Error:', error);
+      console.log('Depth Error:', error);
       return {
         success: false,
         error: error.message || 'Failed to fetch depth'

@@ -19,6 +19,7 @@
     "@chaingpt/generalchat": "^0.0.17",
     "@google/generative-ai": "^0.24.1",
     "axios": "^1.6.2",
+    "binance-api-node": "^0.13.2",
     "bybit-api": "^4.4.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
@@ -26,6 +27,7 @@
     "express": "^4.18.2",
     "express-rate-limit": "^7.1.5",
     "helmet": "^7.1.0",
+    "kucoin-node-sdk": "^1.1.1",
     "morgan": "^1.10.0",
     "xt-open-api": "^1.0.16"
   },
