@@ -124,11 +124,19 @@ export const getPortfolio = async (req, res) => {
 // New function for combined portfolio across exchanges
 export const getCombinedPortfolio = async (req, res) => {
   try {
-    // Extract credentials for both exchanges
+    // Extract credentials for all exchanges
     const xtApiKey = req.headers['x-xt-api-key'] || req.body.xtApiKey;
     const xtSecretKey = req.headers['x-xt-secret-key'] || req.body.xtSecretKey;
     const bybitApiKey = req.headers['x-bybit-api-key'] || req.body.bybitApiKey;
     const bybitSecretKey = req.headers['x-bybit-secret-key'] || req.body.bybitSecretKey;
+    const binanceApiKey = req.headers['x-binance-api-key'] || req.body.binanceApiKey;
+    const binanceSecretKey = req.headers['x-binance-secret-key'] || req.body.binanceSecretKey;
+    const kucoinApiKey = req.headers['x-kucoin-api-key'] || req.body.kucoinApiKey;
+    const kucoinSecretKey = req.headers['x-kucoin-secret-key'] || req.body.kucoinSecretKey;
+    const kucoinPassphrase = req.headers['x-kucoin-passphrase'] || req.body.kucoinPassphrase;
+    const bitgetApiKey = req.headers['x-bitget-api-key'] || req.body.bitgetApiKey;
+    const bitgetSecretKey = req.headers['x-bitget-secret-key'] || req.body.bitgetSecretKey;
+    const bitgetPassphrase = req.headers['x-bitget-passphrase'] || req.body.bitgetPassphrase;
 
     const results = [];
     const errors = [];
@@ -167,11 +175,76 @@ export const getCombinedPortfolio = async (req, res) => {
       }
     }
 
+    // Fetch Binance portfolio if credentials provided
+    if (binanceApiKey && binanceSecretKey) {
+      try {
+        const binanceResult = await binanceService.getPortfolio(binanceApiKey, binanceSecretKey);
+        if (binanceResult.success) {
+          results.push({
+            exchange: 'binance',
+            ...binanceResult
+          });
+        } else {
+          errors.push({ exchange: 'binance', error: binanceResult.error });
+        }
+      } catch (error) {
+        errors.push({ exchange: 'binance', error: error.message });
+      }
+    }
+
+    // Fetch KuCoin portfolio if credentials provided
+    if (kucoinApiKey && kucoinSecretKey && kucoinPassphrase) {
+      try {
+        const kucoinResult = await kucoinService.getPortfolio(kucoinApiKey, kucoinSecretKey, kucoinPassphrase);
+        if (kucoinResult.success) {
+          results.push({
+            exchange: 'kucoin',
+            ...kucoinResult
+          });
+        } else {
+          errors.push({ exchange: 'kucoin', error: kucoinResult.error });
+        }
+      } catch (error) {
+        errors.push({ exchange: 'kucoin', error: error.message });
+      }
+    }
+
+    // Fetch Bitget portfolio if credentials provided
+    if (bitgetApiKey && bitgetSecretKey && bitgetPassphrase) {
+      try {
+        const bitgetResult = await bitgetService.getPortfolio(bitgetApiKey, bitgetSecretKey, bitgetPassphrase);
+        if (bitgetResult.success) {
+          results.push({
+            exchange: 'bitget',
+            ...bitgetResult
+          });
+        } else {
+          errors.push({ exchange: 'bitget', error: bitgetResult.error });
+        }
+      } catch (error) {
+        errors.push({ exchange: 'bitget', error: error.message });
+      }
+    }
+
     if (results.length === 0) {
       return res.status(400).json({
         success: false,
         error: 'No valid exchange credentials provided',
-        errors: errors
+        errors: errors,
+        requiredHeaders: {
+          'x-xt-api-key': 'XT API Key',
+          'x-xt-secret-key': 'XT Secret Key',
+          'x-bybit-api-key': 'Bybit API Key',
+          'x-bybit-secret-key': 'Bybit Secret Key',
+          'x-binance-api-key': 'Binance API Key',
+          'x-binance-secret-key': 'Binance Secret Key',
+          'x-kucoin-api-key': 'KuCoin API Key',
+          'x-kucoin-secret-key': 'KuCoin Secret Key',
+          'x-kucoin-passphrase': 'KuCoin Passphrase',
+          'x-bitget-api-key': 'Bitget API Key',
+          'x-bitget-secret-key': 'Bitget Secret Key',
+          'x-bitget-passphrase': 'Bitget Passphrase'
+        }
       });
     }
 
