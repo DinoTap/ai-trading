@@ -10,8 +10,8 @@ import { chainGPTService } from '../services/chaingpt.service.js';
 // Send a message to the AI
 export const sendMessage = async (req, res) => {
   try {
-    const { message, provider  } = req.body; // Default to ChainGPT for real-time data
-
+    const { message, provider = 'chaingpt' } = req.body; // Default to ChainGPT for real-time data
+console.log('provider', provider);
     if (!message || typeof message !== 'string' || message.trim() === '') {
       return res.status(400).json({
         success: false,
@@ -20,7 +20,8 @@ export const sendMessage = async (req, res) => {
     }
 
     // Validate provider
-    if (!['gemini', 'chaingpt', 'both'].includes(provider.toLowerCase())) {
+    const normalizedProvider = (provider || 'chaingpt').toLowerCase();
+    if (!['gemini', 'chaingpt', 'both'].includes(normalizedProvider)) {
       return res.status(400).json({
         success: false,
         error: 'Invalid provider. Must be "gemini", "chaingpt", or "both"'
@@ -31,13 +32,13 @@ export const sendMessage = async (req, res) => {
     let providerName;
 
     // Select AI service based on provider
-    if (provider.toLowerCase() === 'chaingpt') {
+    if (normalizedProvider === 'chaingpt') {
       aiService = chainGPTService;
       providerName = 'ChainGPT';
-    } else if (provider.toLowerCase() === 'gemini') {
+    } else if (normalizedProvider === 'gemini') {
       aiService = geminiService;
       providerName = 'Gemini';
-    } else if (provider.toLowerCase() === 'both') {
+    } else if (normalizedProvider === 'both') {
       // Get responses from both providers for comparison
       const results = await Promise.allSettled([
         chainGPTService.isConfigured() ? chainGPTService.sendMessage(message) : Promise.reject('ChainGPT not configured'),
