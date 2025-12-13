@@ -340,3 +340,33 @@ Please provide a comprehensive analysis following the structure above.`;
   }
 };
 
+// Update Gemini API key dynamically
+export const updateGeminiApiKey = async (req, res) => {
+  try {
+    const { apiKey } = req.body;
+
+    if (!apiKey || typeof apiKey !== 'string' || apiKey.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        error: 'API key is required and must be a non-empty string'
+      });
+    }
+
+    // Update the API key in the service
+    geminiService.setApiKey(apiKey);
+
+    res.json({
+      success: true,
+      message: 'Gemini API key updated successfully',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.log('Error updating Gemini API key:', error);
+    
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to update API key'
+    });
+  }
+};
+

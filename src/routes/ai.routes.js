@@ -4,7 +4,8 @@ import {
   getStatus, 
   getRealTimePrice, 
   getMarketAnalysis,
-  analyzePortfolio
+  analyzePortfolio,
+  updateGeminiApiKey
 } from '../controllers/ai.controller.js';
 
 const router = express.Router();
@@ -36,6 +37,10 @@ router.get('/analysis/:symbol', getMarketAnalysis);
 // POST /api/ai/portfolio/analyze - Analyze crypto portfolio (Gemini)
 // Body: { portfolio: [{ token: "BTC", amount: 0.5 }, { token: "ETH", amount: 10 }] }
 router.post('/portfolio/analyze', analyzePortfolio);
+
+// PUT /api/ai/gemini/api-key - Update Gemini API key dynamically
+// Body: { apiKey: "your_new_api_key" }
+router.put('/gemini/api-key', updateGeminiApiKey);
 
 export default router;
 

@@ -1,4 +1,7 @@
-import axios from 'axios';
+import { GoogleGenAI } from "@google/genai";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // System prompt to restrict AI to crypto and blockchain topics
 const CRYPTO_SYSTEM_PROMPT = `You are an expert AI Trading Assistant specializing EXCLUSIVELY in cryptocurrency and blockchain technology. Your expertise includes:
@@ -30,12 +33,36 @@ If a user asks about something unrelated to crypto/blockchain, respond with:
 
 class GeminiService {
   constructor() {
-    // Hardcoded API key
-    this.apiKey = 'AIzaSyBhxN6a35reNyXZBp0kehVLI6GZZq4MnRg';
-    this.model = 'gemini-2.0-flash';
-    this.apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${this.model}:generateContent`;
+    // Use environment variable or fallback to hardcoded key
+    this.apiKey = process.env.GEMINI_API_KEY || 'AIzaSyAeRCdXR_0Ev5YnXJzBESC2dc6tc1S8Uuo';
+    this.model = 'gemini-2.5-flash';
     
-    console.log('✅ Gemini AI service initialized with gemini-2.0-flash');
+    // Initialize GoogleGenAI client - it reads API key from GEMINI_API_KEY env var automatically
+    // If not in env, we'll set it via apiKey option
+    this.ai = new GoogleGenAI({
+      apiKey: this.apiKey
+    });
+    
+    console.log('✅ Gemini AI service initialized with gemini-2.5-flash');
+    if (process.env.GEMINI_API_KEY) {
+      console.log('✅ Using Gemini API key from environment variable');
+    } else {
+      console.log('⚠️  Using hardcoded Gemini API key. Set GEMINI_API_KEY in .env file to use your own key.');
+    }
+  }
+
+  // Method to update API key dynamically
+  setApiKey(newApiKey) {
+    if (!newApiKey || typeof newApiKey !== 'string' || newApiKey.trim() === '') {
+      throw new Error('Invalid API key provided');
+    }
+    this.apiKey = newApiKey.trim();
+    // Reinitialize the client with new API key
+    this.ai = new GoogleGenAI({
+      apiKey: this.apiKey
+    });
+    console.log('✅ Gemini API key updated');
+    return true;
   }
 
   async sendMessage(message) {
@@ -53,26 +80,14 @@ Assistant (respond as a crypto/blockchain expert only):`;
 
       console.log('Sending message to Gemini API...');
       
-      const response = await axios.post(
-        `${this.apiUrl}?key=${this.apiKey}`,
-        {
-          contents: [
-            {
-              parts: [{ 
-                text: fullMessage
-              }],
-            },
-          ],
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      // Use the new SDK
+      const response = await this.ai.models.generateContent({
+        model: this.model,
+        contents: fullMessage
+      });
 
       // Extract the response text
-      const aiResponse = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      const aiResponse = response.text;
       
       if (!aiResponse) {
         throw new Error('No response from Gemini API');
@@ -82,27 +97,22 @@ Assistant (respond as a crypto/blockchain expert only):`;
       return aiResponse;
       
     } catch (error) {
-      console.log('Error sending message to Gemini:', error.response?.data || error.message);
+      console.log('Error sending message to Gemini:', error.message || error);
       
       // Handle specific error cases
-      if (error.response?.status === 400) {
-        const errorMessage = error.response?.data?.error?.message || 'Bad request';
-        throw new Error(`Gemini API Error: ${errorMessage}`);
-      }
-      
-      if (error.response?.status === 403) {
+      if (error.message?.includes('API key')) {
         throw new Error('API key is invalid or does not have permission to use this model');
       }
       
-      if (error.response?.status === 429) {
+      if (error.message?.includes('quota') || error.message?.includes('429')) {
         throw new Error('API quota exceeded. Please try again later.');
       }
       
-      if (error.response?.status === 404) {
+      if (error.message?.includes('404') || error.message?.includes('not found')) {
         throw new Error('Gemini model not found. The model name might be incorrect.');
       }
       
-      throw new Error(error.response?.data?.error?.message || error.message || 'Failed to get response from AI');
+      throw new Error(error.message || 'Failed to get response from AI');
     }
   }
 
