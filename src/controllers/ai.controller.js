@@ -229,3 +229,114 @@ export const getMarketAnalysis = async (req, res) => {
   }
 };
 
+// Analyze crypto portfolio
+export const analyzePortfolio = async (req, res) => {
+  try {
+    const { portfolio } = req.body;
+
+    // Validate portfolio data
+    if (!portfolio || !Array.isArray(portfolio) || portfolio.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Portfolio is required and must be a non-empty array. Format: [{ token: "BTC", amount: 0.5 }, { token: "ETH", amount: 10 }]'
+      });
+    }
+
+    // Validate each portfolio item
+    for (const item of portfolio) {
+      if (!item.token || !item.amount) {
+        return res.status(400).json({
+          success: false,
+          error: 'Each portfolio item must have "token" and "amount" fields'
+        });
+      }
+    }
+
+    // Check if Gemini is configured
+    const isConfigured = await geminiService.isConfigured();
+    if (!isConfigured) {
+      return res.status(503).json({
+        success: false,
+        error: 'Gemini service is not configured. Please set up the API key.'
+      });
+    }
+
+    // Format portfolio data for the prompt
+    const portfolioText = portfolio.map(item => 
+      `- ${item.token.toUpperCase()}: ${item.amount}`
+    ).join('\n');
+
+    // Create the comprehensive analysis prompt
+    const analysisPrompt = `You are a professional crypto portfolio analyst with experience in risk management, tokenomics, and market cycles.
+
+I will provide my crypto portfolio details below. Your task is to deliver a clear, structured, and honest financial analysis.
+
+For this portfolio, please do the following:
+
+**Portfolio Overview**
+- Break down allocations by asset, sector (L1, L2, DeFi, AI, Memes, Infrastructure, etc.), and market cap tier (large, mid, small).
+- Identify concentration risks and overexposure.
+
+**Risk Analysis**
+- Assess downside risk, volatility, and correlation between assets.
+- Highlight tokens with high regulatory, liquidity, or execution risk.
+- Comment on bear-market survivability.
+
+**Performance Outlook**
+- Provide short-term (3–6 months) and long-term (1–3 years) outlooks.
+- Explain assumptions clearly (market cycle, BTC dominance, macro trends).
+
+**Capital Efficiency**
+- Identify underperforming or redundant holdings.
+- Flag tokens that do not justify their portfolio weight.
+
+**Optimization Suggestions**
+- Suggest rebalancing actions with reasoning.
+- Recommend allocation ranges, not exact prices.
+- Include conservative, balanced, and aggressive strategy options.
+
+**Scenario Analysis**
+Explain how the portfolio performs in:
+- Bull market
+- Sideways market
+- Sharp market correction
+
+**Final Summary**
+- Strengths of the portfolio
+- Key weaknesses
+- Top 3 actionable improvements
+
+**Constraints:**
+- Do not provide financial disclaimers.
+- Avoid generic advice.
+- Base conclusions on logic, market structure, and risk principles.
+- Be direct and realistic, not overly optimistic.
+
+Here is my portfolio data:
+
+${portfolioText}
+
+Please provide a comprehensive analysis following the structure above.`;
+
+    // Send to Gemini
+    const analysis = await geminiService.sendMessage(analysisPrompt);
+
+    res.json({
+      success: true,
+      data: {
+        portfolio: portfolio,
+        analysis: analysis,
+        timestamp: new Date().toISOString(),
+        provider: 'Gemini'
+      }
+    });
+  } catch (error) {
+    console.log('Error analyzing portfolio:', error);
+    
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to analyze portfolio'
+    });
+  }
+};
+

@@ -3,7 +3,8 @@ import {
   sendMessage, 
   getStatus, 
   getRealTimePrice, 
-  getMarketAnalysis 
+  getMarketAnalysis,
+  analyzePortfolio
 } from '../controllers/ai.controller.js';
 
 const router = express.Router();
@@ -31,6 +32,10 @@ router.get('/price/:symbol', getRealTimePrice);
 // GET /api/ai/analysis/:symbol - Get real-time market analysis (ChainGPT)
 // Example: /api/ai/analysis/ETH
 router.get('/analysis/:symbol', getMarketAnalysis);
+
+// POST /api/ai/portfolio/analyze - Analyze crypto portfolio (Gemini)
+// Body: { portfolio: [{ token: "BTC", amount: 0.5 }, { token: "ETH", amount: 10 }] }
+router.post('/portfolio/analyze', analyzePortfolio);
 
 export default router;
 
