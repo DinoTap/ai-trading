@@ -31,7 +31,7 @@ If a user asks about something unrelated to crypto/blockchain, respond with:
 class GeminiService {
   constructor() {
     // Hardcoded API key
-    this.apiKey = 'AIzaSyDYWgFFrZisgXMteoPMmnN-I6d3ah3i_PA';
+    this.apiKey = 'AIzaSyD7tYt2U37phxT6YK74Tn7GwnqnDiKExyk';
     this.model = 'gemini-2.0-flash';
     this.apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${this.model}:generateContent`;
     
