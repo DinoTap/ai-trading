@@ -10,7 +10,7 @@ import { chainGPTService } from '../services/chaingpt.service.js';
 // Send a message to the AI
 export const sendMessage = async (req, res) => {
   try {
-    const { message, provider = 'chaingpt' } = req.body; // Default to ChainGPT for real-time data
+    const { message, provider  } = req.body; // Default to ChainGPT for real-time data
 
     if (!message || typeof message !== 'string' || message.trim() === '') {
       return res.status(400).json({
