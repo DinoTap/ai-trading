@@ -396,6 +396,7 @@ class XTService {
       } else if (type.toUpperCase() === 'MARKET') {
         // For MARKET orders, use amount (total value in quote currency)
         // quantity parameter represents the amount of USDT to spend, not coins to buy
+        orderParams.timeInForce = 'IOC'; // Immediate or Cancel - required by XT API for MARKET orders
         orderParams.amount = quantity.toString();
       }
 
@@ -482,6 +483,7 @@ class XTService {
         }
       } else if (type.toUpperCase() === 'MARKET') {
         // For MARKET sell orders, use quantity (amount of coins to sell)
+        orderParams.timeInForce = 'IOC'; // Immediate or Cancel - required by XT API for MARKET orders
         orderParams.quantity = quantity.toString();
       }
 
